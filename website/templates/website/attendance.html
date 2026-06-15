@@ -1,0 +1,213 @@
+{% extends "website/base.html" %}
+{% load static %}
+{% block content %}
+  <div class="container-fluid px-4 py-4">
+
+    <!-- ================================================ -->
+    <!-- MANAGER VIEW — hidden by default, shown by JS    -->
+    <!-- ================================================ -->
+    <div id="manager-attendance" class="d-none">
+
+      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h4 class="wt-greeting mb-1">Team Attendance</h4>
+          <p class="text-secondary small mb-0">Monitor your team's attendance records</p>
+        </div>
+        <button id="export-csv" class="btn wt-btn-export">
+          ↓ Export CSV
+        </button>
+      </div>
+
+      <!-- TODAY VIEW — who has and hasn't marked today -->
+      <div class="row g-3 mb-4">
+
+        <!-- Present today -->
+        <div class="col-12 col-md-6">
+          <div class="wt-card wt-today-card wt-today-present">
+            <p class="wt-col-title mb-3">
+              <span class="wt-dot-inline wt-dot-green"></span>
+              Present Today
+            </p>
+            <div id="present-today-list" class="d-flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+
+        <!-- Absent today -->
+        <div class="col-12 col-md-6">
+          <div class="wt-card wt-today-card wt-today-absent">
+            <p class="wt-col-title mb-3">
+              <span class="wt-dot-inline wt-dot-red"></span>
+              Not Marked Today
+            </p>
+            <div id="absent-today-list" class="d-flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FILTERS + TABLE -->
+      <div class="wt-card p-0 overflow-hidden">
+
+        <div class="wt-table-header px-4 py-3 d-flex flex-wrap justify-content-between align-items-center gap-3">
+          <span class="text-white fw-semibold" style="font-size:14px;">Attendance Records</span>
+          <div class="d-flex gap-3 flex-wrap align-items-center">
+            <select id="filter-employee" class="wt-select">
+              <option value="all">All Employees</option>
+            </select>
+            <input type="date" id="filter-date" class="wt-input" style="width:160px; padding:6px 12px;"/>
+            <button id="clear-filters" class="btn wt-btn-ghost">Clear</button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table wt-table mb-0">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Employee</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="attendance-tbody"></tbody>
+          </table>
+        </div>
+
+        <div id="att-empty" class="d-none text-center py-5">
+          <p class="text-secondary small mb-0">No records found for the selected filters.</p>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================================================ -->
+    <!-- EMPLOYEE VIEW — hidden by default, shown by JS   -->
+    <!-- ================================================ -->
+    <div id="employee-attendance" class="d-none">
+
+      <!-- Page header -->
+      <div class="mb-4">
+        <h4 class="wt-greeting mb-1">Attendance</h4>
+        <p class="text-secondary small mb-0">Track your daily attendance and working hours</p>
+      </div>
+
+      <div class="row g-4">
+
+        <!-- LEFT — Check-in panel + today's stats -->
+        <div class="col-12 col-lg-4">
+
+          <!-- Today's check-in card -->
+          <div class="wt-card mb-4">
+
+            <p class="wt-col-title mb-3">Today</p>
+
+            <div class="wt-clock mb-3">
+              <span id="live-clock"></span>
+            </div>
+
+            <p id="att-today-date" class="text-secondary small mb-4"></p>
+
+            <button id="checkin-btn" class="btn wt-btn-checkin w-100 mb-3">
+              Check In
+            </button>
+
+            <button id="checkout-btn" class="btn wt-btn-checkout-att w-100 mb-3" disabled>
+              Check Out
+            </button>
+
+            <div id="today-times" class="d-none">
+
+              <div class="wt-time-row">
+                <span class="wt-time-label">Check-in</span>
+                <span id="display-checkin" class="wt-time-value wt-time-green"></span>
+              </div>
+
+              <div class="wt-time-row">
+                <span class="wt-time-label">Check-out</span>
+                <span id="display-checkout" class="wt-time-value text-secondary">—</span>
+              </div>
+
+              <div class="wt-time-row">
+                <span class="wt-time-label">Working hours</span>
+                <span id="display-hours" class="wt-time-value text-secondary">—</span>
+              </div>
+
+              <div id="late-warning" class="wt-late-badge d-none mt-3">
+                ⚠ Late arrival
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Monthly summary card -->
+          <div class="wt-card">
+            <p class="wt-col-title mb-3">This Month</p>
+
+            <div class="wt-time-row mb-2">
+              <span class="wt-time-label">Present days</span>
+              <span id="summary-present" class="wt-time-value wt-time-green"></span>
+            </div>
+
+            <div class="wt-time-row mb-2">
+              <span class="wt-time-label">Absent days</span>
+              <span id="summary-absent" class="wt-time-value" style="color:#f87171;"></span>
+            </div>
+
+            <div class="wt-time-row mb-2">
+              <span class="wt-time-label">Late arrivals</span>
+              <span id="summary-late" class="wt-time-value" style="color:#fb923c;"></span>
+            </div>
+
+            <div class="wt-time-row mb-3">
+              <span class="wt-time-label">Attendance rate</span>
+              <span id="summary-rate" class="wt-time-value wt-time-green"></span>
+            </div>
+
+            <div class="wt-perf-bar-wrap" style="height:6px;">
+              <div id="summary-bar" class="wt-perf-bar-fill" style="height:6px;"></div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- RIGHT — Calendar -->
+        <div class="col-12 col-lg-8">
+          <div class="wt-card">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <button id="prev-month" class="wt-cal-nav">‹</button>
+              <span id="cal-month-label" class="text-white fw-semibold" style="font-size:15px;"></span>
+              <button id="next-month" class="wt-cal-nav">›</button>
+            </div>
+
+            <div class="wt-cal-days-header">
+              <span>Sun</span><span>Mon</span><span>Tue</span>
+              <span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+
+            <div id="cal-grid" class="wt-cal-grid"></div>
+
+            <div class="d-flex gap-4 mt-4 flex-wrap">
+              <span class="wt-cal-legend"><span class="wt-cal-dot wt-dot-present"></span>Present</span>
+              <span class="wt-cal-legend"><span class="wt-cal-dot wt-dot-absent"></span>Absent</span>
+              <span class="wt-cal-legend"><span class="wt-cal-dot wt-dot-late"></span>Late arrival</span>
+              <span class="wt-cal-legend"><span class="wt-cal-dot wt-dot-today"></span>Today</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src='{% static "js/attendance.js" %}'></script>
+{% endblock content %}

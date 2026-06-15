@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WorkTrack — Login</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+</head>
+<body class="wt-auth-page">
+
+  <!--
+    LOGIN PAGE
+    - No navbar (user is not logged in yet)
+    - After successful login → save user to localStorage → go to dashboard.html
+    - If login fails → show error message below the form
+  -->
+
+  <!--
+    wt-auth-wrapper = full screen centered layout
+    d-flex + align-items-center + justify-content-center = center the card
+    both vertically and horizontally on the screen
+  -->
+  <div class="wt-auth-wrapper d-flex align-items-center justify-content-center">
+
+    <!--
+      wt-auth-card = the white-bordered dark box
+      w-100 = takes full width up to a max-width set in CSS
+    -->
+    <div class="wt-auth-card w-100">
+
+      <!-- Logo at top -->
+      <div class="text-center mb-4">
+        <h4 class="wt-auth-logo">WorkTrack</h4>
+        <p class="text-secondary small mt-1">Sign in to your account</p>
+      </div>
+
+      <!-- Login form -->
+      <!--
+        id="login-form" — auth.js listens for the submit event on this
+        We use a real <form> tag so pressing Enter also submits
+      -->
+      <form id="login-form" novalidate>
+
+        <!-- Username field -->
+        <div class="mb-3">
+          <!--
+            <label> links to the input via for="username" matching input id
+            This is good practice — clicking label focuses the input
+          -->
+          <label for="username" class="wt-label">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            class="form-control wt-input"
+            placeholder="Enter your username"
+            autocomplete="username"
+          />
+        </div>
+
+        <!-- Password field -->
+        <div class="mb-4">
+          <label for="password" class="wt-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control wt-input"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+          />
+        </div>
+
+        <!--
+          Error message box — hidden by default (d-none)
+          auth.js removes d-none and sets the text when login fails
+        -->
+        <div id="login-error" class="wt-form-error d-none mb-3">
+          Incorrect username or password.
+        </div>
+
+        <!--
+          Submit button
+          w-100 = full width button (Bootstrap utility)
+          type="submit" = triggers form submit event
+        -->
+        <button type="submit" class="btn wt-btn-primary w-100">
+          Login
+        </button>
+
+      </form>
+
+      <!-- Link to register page -->
+      <p class="text-center text-secondary small mt-4 mb-0">
+        Don't have an account?
+        <a href='{% url "register" %}' class="wt-link">Apply here</a>
+      </p>
+
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!--
+    auth.js handles the login logic:
+    1. Listens for form submit
+    2. Checks username + password against mock user data
+    3. If correct → saves user to localStorage → redirects to dashboard
+    4. If wrong → shows error message
+  -->
+    <script src='{% static "js/login.js" %}'></script>
+
+</body>
+</html>

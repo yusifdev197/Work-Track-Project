@@ -1,0 +1,105 @@
+{% extends "website/base.html" %}
+{% load static %}
+{% block content %}
+<script>
+  document.body.dataset.managerOnly = 'true';
+  document.body.style.visibility = 'hidden'; 
+</script>
+  <div class="container-fluid px-4 py-4">
+
+    <!-- Header -->
+    <div class="mb-4">
+      <h4 class="wt-greeting mb-1">Team Overview</h4>
+      <p class="text-secondary small mb-0">Performance snapshot of your entire team</p>
+    </div>
+
+    <!-- 5 summary stat cards -->
+    <div class="row g-3 mb-4">
+
+      <div class="col-6 col-md-4 col-lg">
+        <div class="wt-card text-center wt-overview-stat">
+          <p class="wt-overview-stat-label">Total Employees</p>
+          <h3 id="ov-total" class="wt-stat-number mb-0"></h3>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg">
+        <div class="wt-card text-center wt-overview-stat">
+          <p class="wt-overview-stat-label">Present Today</p>
+          <h3 id="ov-present" class="wt-stat-number mb-0" style="color:#4ade80"></h3>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg">
+        <div class="wt-card text-center wt-overview-stat">
+          <p class="wt-overview-stat-label">Tasks Done This Week</p>
+          <h3 id="ov-week" class="wt-stat-number mb-0" style="color:#60a5fa"></h3>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg">
+        <div class="wt-card text-center wt-overview-stat">
+          <p class="wt-overview-stat-label">Tasks Done This Month</p>
+          <h3 id="ov-month" class="wt-stat-number mb-0" style="color:#c084fc"></h3>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg">
+        <div class="wt-card text-center wt-overview-stat">
+          <p class="wt-overview-stat-label">Failed / Missed</p>
+          <h3 id="ov-failed" class="wt-stat-number mb-0" style="color:#f87171"></h3>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Employee performance table -->
+    <div class="wt-card p-0 overflow-hidden">
+
+      <!-- Table header row -->
+      <div class="wt-table-header px-4 py-3 d-flex justify-content-between align-items-center">
+        <span class="text-white fw-semibold" style="font-size:14px;">Employee Performance</span>
+        <!-- Search filter -->
+        <input
+          type="text"
+          id="overview-search"
+          class="wt-search-input"
+          placeholder="Search employee..."
+        />
+      </div>
+
+      <!--
+        Table wrapper — overflow-x: auto for mobile
+        so table never breaks layout on small screens
+      -->
+      <div class="table-responsive">
+        <table class="table wt-table mb-0">
+          <thead>
+            <tr>
+              <th>Employee</th>
+              <th>Status</th>
+              <th>Check-in</th>
+              <th>Tasks (Week)</th>
+              <th>Tasks (Month)</th>
+              <th>Failed</th>
+              <th>Attendance</th>
+              <th>Performance</th>
+            </tr>
+          </thead>
+          <!--
+            tbody id="overview-tbody"
+            overview.js renders one <tr> per employee here
+          -->
+          <tbody id="overview-tbody"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src='{% static "js/overview.js" %}'></script>
+  
+
+{% endblock content %}

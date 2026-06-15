@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WorkTrack</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+</head>
+<body>
+  <!--
+  =====================================================
+  BASE.HTML — BLUEPRINT / REFERENCE FILE
+  =====================================================
+  This file is NOT an actual page users visit.
+  It shows the full structure every logged-in page follows.
+
+  HOW TO USE THIS:
+  When building a new page (dashboard, tasks, etc.):
+    1. Copy this entire file
+    2. Rename it (e.g. dashboard.html)
+    3. Change the <title>
+    4. Add your page's JS file at the bottom
+    5. Put your page content inside the
+       "YOUR PAGE CONTENT GOES HERE" section
+    6. Update the active nav link for that page
+
+  DO NOT put login.html or register.html this way
+  — those pages have no navbar.
+  =====================================================
+  -->
+
+
+  <!-- ===================== NAVBAR =====================
+    Visible on every logged-in page.
+    Copy this navbar block exactly into each new page.
+
+    ACTIVE LINK:
+    On each page, find the matching nav-link and
+    add class "active" to it. Remove active from others.
+    Example — on tasks.html:
+      <a class="nav-link active" href="tasks.html">Tasks</a>
+      <a class="nav-link" href="dashboard.html">Dashboard</a>
+
+    MANAGER LINKS:
+    Overview and Applications have id="nav-overview"
+    and id="nav-applications" with class d-none.
+    auth.js automatically removes d-none for managers.
+    You don't need to touch these manually.
+  -->
+  <nav class="navbar navbar-expand-lg navbar-dark wt-navbar px-4">
+
+    <!-- Logo -->
+    <a class="navbar-brand" href="{% url "dashboard" %}">WorkTrack</a>
+
+    <!-- Mobile hamburger -->
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMenu">
+
+      <!-- LEFT — page links -->
+      <!-- me-auto pushes this left, profile+logout go right -->
+      <ul class="navbar-nav me-auto align-items-center">
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url "dashboard" %}">Dashboard</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url "tasks-page" %}">Tasks</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url "attendance" %}">Attendance</a>
+        </li>
+
+        
+
+        <!--
+          Manager-only — hidden by default (d-none)
+          auth.js removes d-none when is_manager = true
+          DO NOT remove d-none manually here
+        -->
+        <li class="nav-item d-none" id="nav-overview">
+          <a class="nav-link" href="{% url "overview" %}">Overview</a>
+        </li>
+
+        <li class="nav-item d-none" id="nav-applications">
+          <a class="nav-link" href="{% url "applications" %}">Applications</a>
+        </li>
+
+        
+
+      </ul>
+
+      <!-- RIGHT — profile + logout -->
+      <ul class="navbar-nav align-items-center gap-2">
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url "notifications" %}" style="position:relative; padding-right:18px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+              <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
+            </svg>
+            <span id="notif-dot" class="d-none" style="
+            position: absolute;
+            top: 14px;
+            right: 10px;
+            min-width: 10px;
+            height: 10px;
+            background-color: #ef4444;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 10px;
+            border: 2px solid #0d0f14;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 3px;
+            line-height: 1;
+            "></span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <!--
+            wt-profile-link = flex container (avatar + name side by side)
+            JS sets avatar src and name text from localStorage
+          -->
+          <a href="{% url "profile" %}" class="wt-profile-link">
+            <img id="nav-avatar" class="wt-avatar" alt="avatar"/>
+            <span id="nav-username"></span>
+          </a>
+        </li>
+
+        <!-- Vertical divider — desktop only -->
+        <li class="nav-item wt-nav-divider d-none d-lg-block"></li>
+
+        <li class="nav-item">
+          <!--
+            id="logout-btn" — auth.js attaches a click listener here
+            Clears localStorage and redirects to login.html
+          -->
+          <button class='nav-link wt-logout' id='logout-btn'>Logout</button>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+  <!-- ===================== END NAVBAR ===================== -->
+
+
+  <!-- ===================== PAGE CONTENT =====================
+    Replace everything inside this div with your page's content
+  -->
+  <div class="container-fluid px-4 py-4">
+
+    <!-- YOUR PAGE CONTENT GOES HERE -->
+     {% block content %}{% endblock content %}
+
+  </div>
+  <!-- ===================== END PAGE CONTENT ===================== -->
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- auth.js — MUST be on every logged-in page -->
+  <!-- It checks if user is logged in, fills navbar, handles logout -->
+
+  <!--
+    ADD YOUR PAGE-SPECIFIC JS FILE HERE
+    Example for dashboard:
+    <script src="js/data.js"></script>
+    <script src="js/dashboard.js"></script>
+  -->
+  <!-- Toast container — showToast() available on every page -->
+  <div id="wt-toast-container"></div>
+  <script src="{% static 'js/toast.js' %}"></script>
+  <script src="{% static "js/auth.js" %}"></script>
+  {% comment %} <script src="{% static "js/notification_poll.js" %}"></script> {% endcomment %}
+
+</body>
+</html>

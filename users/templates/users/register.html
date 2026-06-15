@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WorkTrack — Apply</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+</head>
+<body class="wt-auth-page">
+
+  <!--
+    REGISTER PAGE (Application Form)
+    - No navbar (user is not logged in)
+    - This is NOT a regular signup — it's a job application form
+    - After submit → show success message (no redirect, user waits for email)
+    - Manager reviews application and approves/rejects
+  -->
+
+  <div class="wt-auth-wrapper d-flex align-items-center justify-content-center py-5">
+
+    <div class="wt-auth-card wt-auth-card--wide w-100">
+
+      <!-- Header -->
+      <div class="text-center mb-4">
+        <h4 class="wt-auth-logo">WorkTrack</h4>
+        <p class="text-secondary small mt-1">Submit your application to join the team</p>
+      </div>
+
+      <!--
+        Warning notice — from UI breakdown doc:
+        "Please double check your details — wrong info may get you rejected"
+        wt-notice = yellow warning box style
+      -->
+      <div class="wt-notice mb-4">
+
+        ⚠️ Please double check your details — wrong info may get you rejected.
+
+      </div>
+
+      <!--
+        Application form
+        id="register-form" — register.js listens for submit on this
+        novalidate = we handle validation ourselves in JS
+      -->
+      <form id="register-form" novalidate>
+
+        <!--
+          row + g-3 = Bootstrap grid row with gap between columns
+          col-md-6 = each field takes half width on medium+ screens
+          col-12  = full width on mobile
+        -->
+        <div class="row g-3">
+
+          <!-- First Name -->
+          <div class="col-12 col-md-6">
+            <label for="first-name" class="wt-label">First Name <span class="wt-required">*</span></label>
+            <input type="text" id="first-name" class="form-control wt-input" placeholder="Your first name"/>
+          </div>
+
+          <!-- Last Name -->
+          <div class="col-12 col-md-6">
+            <label for="last-name" class="wt-label">Last Name <span class="wt-required">*</span></label>
+            <input type="text" id="last-name" class="form-control wt-input" placeholder="Your last name"/>
+          </div>
+
+          <!-- Email -->
+          <div class="col-12 col-md-6">
+            <label for="email" class="wt-label">Email <span class="wt-required">*</span></label>
+            <input type="email" id="email" class="form-control wt-input" placeholder="user@example.com"/>
+          </div>
+
+          <!-- Phone -->
+          <div class="col-12 col-md-6">
+            <label for="phone" class="wt-label">Phone Number <span class="wt-required">*</span></label>
+            <input type="tel" id="phone" class="form-control wt-input" placeholder="+92 300 1234567" max=20/>
+          </div>
+
+          <!-- Languages / Skills -->
+          <div class="col-12">
+            <label for="skills" class="wt-label">Languages / Skills <span class="wt-required">*</span></label>
+            <input type="text" id="skills" class="form-control wt-input" placeholder="e.g. Python, Django, JavaScript, React"/>
+            <p class="wt-hint">Separate each skill with a comma</p>
+          </div>
+
+          <!-- Project Links -->
+          <div class="col-12">
+            <label for="project-links" class="wt-label">Project Links</label>
+            <input type="url" id="project-links" class="form-control wt-input" placeholder="https://github.com/yourname or Google Drive link"/>
+            <p class="wt-hint">GitHub, Google Drive, or any portfolio link</p>
+          </div>
+
+          <!-- CV Upload -->
+          <div class="col-12">
+            <label for="cv" class="wt-label">CV / Resume <span class="wt-required">*</span></label>
+            <!--
+              wt-file-input = custom styled file input
+              accept=".pdf,.doc,.docx" = only allow document files
+            -->
+            <input type="file" id="cv" class="form-control wt-input wt-file-input" accept=".pdf,.doc,.docx"/>
+            <p class="wt-hint">PDF or Word document only</p>
+          </div>
+
+          <!-- About yourself -->
+          <div class="col-12">
+            <label for="about" class="wt-label">About Yourself <span class="wt-required">*</span></label>
+            <!--
+              <textarea> = multi-line text input
+              rows="4" = default height (4 lines visible)
+              resize: vertical in CSS allows user to drag it taller
+            -->
+            <textarea
+              id="about"
+              class="form-control wt-input"
+              rows="4"
+              placeholder="Tell us about yourself, your experience, and why you want to join..."
+            ></textarea>
+          </div>
+
+        </div>
+        <!-- end row -->
+
+        <!-- Error message — hidden until JS shows it -->
+        <div id="register-error" class="wt-form-error d-none mt-3">
+          Please fill in all required fields.
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit" class="btn wt-btn-primary w-100 mt-4">
+          Submit Application
+        </button>
+
+      </form>
+      <!-- ===== END FORM ===== -->
+
+
+      <!--
+        SUCCESS STATE — hidden by default (d-none)
+        After form submit, JS hides the form and shows this instead
+        Matches wireframe: "Your application has been submitted"
+      -->
+      <div id="register-success" class="d-none text-center py-4">
+        <div class="wt-success-icon mb-3">✓</div>
+        <h5 class="text-white mb-2">Your application has been submitted</h5>
+        <p class="text-secondary small">
+          You will get the email on <span id="success-email" class="text-white"></span> after it has been reviewed.
+        </p>
+        <a href="{% url "login" %}" class="wt-link small mt-3 d-inline-block">Back to Login</a>
+      </div>
+
+      <!-- Already have an account -->
+      <p class="text-center text-secondary small mt-4 mb-0" id="login-link-row">
+        Already have an account?
+        <a href="{% url "login" %}" class="wt-link">Login here</a>
+      </p>
+
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!--
+    register.js handles:
+    1. Form submit event
+    2. Basic validation (required fields not empty)
+    3. On success → hide form, show success message with email
+  -->
+  <script src="{% static "js/register.js" %}"></script>
+
+</body>
+</html>

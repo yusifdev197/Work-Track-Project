@@ -1,0 +1,217 @@
+{% extends "website/base.html" %}
+{% load static %}
+{% block content %}
+  <div class="container-fluid px-4 py-4">
+
+    <div class="mb-4">
+      <a href="{% url "dashboard" %}" class="wt-back-link">← Back to Dashboard</a>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+      <div class="col-12 col-lg-8">
+
+        <!-- ===== TOP CARD — avatar + name + role ===== -->
+        <div class="wt-card wt-profile-top-card mb-4">
+          <div class="text-center mb-4">
+
+            <!--
+              Avatar wrapper — clicking it opens the hidden file input
+              so user can upload a new photo
+            -->
+            <div class="wt-profile-avatar-wrap mx-auto mb-3"
+                 id="avatar-upload-trigger"
+                 title="Click to change photo">
+
+              <img id="profile-avatar"
+                   src="assets/avatar.png"
+                   class="wt-profile-avatar"
+                   alt="avatar"/>
+
+              <div id="profile-avatar-fallback"
+                   class="wt-profile-avatar-fallback d-none"></div>
+
+              <!--
+                Camera overlay — appears on hover
+                Tells user they can click to change photo
+              -->
+              <div class="wt-avatar-overlay">
+                <span class="wt-avatar-overlay-icon">📷</span>
+                <span class="wt-avatar-overlay-text">Change</span>
+              </div>
+            </div>
+
+            <!--
+              Hidden file input — triggered by clicking avatar
+              accept="image/*" = only image files allowed
+            -->
+            <input type="file"
+                   id="avatar-file-input"
+                   accept="image/*"
+                   class="d-none"/>
+
+            <h4 id="profile-name" class="text-white fw-bold mb-1"></h4>
+            <span id="profile-role-badge" class="wt-role-badge"></span>
+          </div>
+
+          <!-- User ID + Joined -->
+          <div class="row g-3 text-center">
+            <div class="col-6">
+              <p class="wt-profile-info-label">User ID</p>
+              <p id="profile-userid" class="wt-profile-info-value"></p>
+            </div>
+            <div class="col-6">
+              <p class="wt-profile-info-label">Joined</p>
+              <p id="profile-joined" class="wt-profile-info-value"></p>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- ===== SOCIAL LINKS CARD ===== -->
+        <div class="wt-card mb-4" id='link-card'>
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <p class="wt-col-title mb-0">Social Links</p>
+            <!--
+              Edit toggle button
+              Switches between view mode and edit mode
+            -->
+            <button id="links-edit-btn" class="btn wt-btn-ghost-sm">Edit</button>
+          </div>
+
+          <!-- VIEW MODE — shows links as clickable -->
+          <div id="links-view-mode">
+
+            <!-- GitHub -->
+            <div class="wt-social-row mb-3">
+              <div class="wt-social-icon wt-social-github">
+                <!-- GitHub SVG icon -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+              </div>
+              <div class="flex-grow-1">
+                <p class="wt-social-label">GitHub</p>
+                <a id="view-github" href="#" target="_blank" rel="noopener"
+                   class="wt-social-link"></a>
+              </div>
+            </div>
+
+            <!-- LinkedIn -->
+            <div class="wt-social-row">
+              <div class="wt-social-icon wt-social-linkedin">
+                <!-- LinkedIn SVG icon -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </div>
+              <div class="flex-grow-1">
+                <p class="wt-social-label">LinkedIn</p>
+                <a id="view-linkedin" href="#" target="_blank" rel="noopener"
+                   class="wt-social-link"></a>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- EDIT MODE — input fields, hidden by default -->
+          <div id="links-edit-mode" class="d-none">
+
+            <div class="mb-3">
+              <label class="wt-label">GitHub URL</label>
+              <input type="url" id="input-github"
+                     class="form-control wt-input"
+                     placeholder="https://github.com/yourusername"/>
+            </div>
+
+            <div class="mb-4">
+              <label class="wt-label">LinkedIn URL</label>
+              <input type="url" id="input-linkedin"
+                     class="form-control wt-input"
+                     placeholder="https://linkedin.com/in/yourprofile"/>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button id="links-save-btn" class="btn wt-btn-primary px-4">
+                Save
+              </button>
+              <button id="links-cancel-btn" class="btn wt-btn-ghost">
+                Cancel
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ===== SKILLS CARD ===== -->
+        <div class="wt-card mb-4" id='skill-card'>
+          <p class="wt-col-title mb-3">Skills</p>
+          <div id="profile-skills" class="d-flex flex-wrap gap-2"></div>
+        </div>
+
+
+        <!-- ===== STATS CARD ===== -->
+        <div class="wt-card mb-4" id='stats-card'>
+          <p class="wt-col-title mb-4">Stats</p>
+
+          <div class="row g-4">
+
+            <div class="col-6 col-md-3">
+              <div class="wt-stat-block">
+                <div class="wt-stat-icon wt-stat-icon-blue">✓</div>
+                <h4 id="stat-tasks-done" class="wt-stat-big mb-1"></h4>
+                <p class="wt-stat-label">Tasks Done</p>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+              <div class="wt-stat-block">
+                <div class="wt-stat-icon wt-stat-icon-orange">◷</div>
+                <h4 id="stat-tasks-doing" class="wt-stat-big mb-1"></h4>
+                <p class="wt-stat-label">In Progress</p>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+              <div class="wt-stat-block">
+                <div class="wt-stat-icon wt-stat-icon-green">📅</div>
+                <h4 id="stat-attendance" class="wt-stat-big mb-1"></h4>
+                <p class="wt-stat-label">Attendance</p>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+              <div class="wt-stat-block">
+                <div class="wt-stat-icon wt-stat-icon-red">✗</div>
+                <h4 id="stat-failed" class="wt-stat-big mb-1"></h4>
+                <p class="wt-stat-label">Failed</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="mt-4">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="wt-detail-section-label">Monthly Attendance Rate</span>
+              <span id="stat-attendance-pct" class="wt-detail-section-label"></span>
+            </div>
+            <div class="wt-perf-bar-wrap" style="height:8px; width:100%;">
+              <div id="stat-attendance-bar" class="wt-perf-bar-fill" style="height:8px;"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="text-secondary small text-center mb-0" id='contact-p'>
+          Contact your manager to update your name, skills, or role information.
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src='{% static "js/profile.js" %}'></script>
+{% endblock content %}

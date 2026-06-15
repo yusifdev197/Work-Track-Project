@@ -1,0 +1,45 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h1 class="wt-greeting mb-1">Notifications</h1>
+    <p class="mb-0" style="color:#4a5568; font-size:13px;">
+      <span id="notif-unread-count">—</span> unread
+    </p>
+  </div>
+  <button class="wt-btn-ghost-sm" id="mark-all-btn" style="font-size:13px; padding:7px 16px;">
+    Mark all as read
+  </button>
+</div>
+
+<!-- Filter tabs -->
+<div class="d-flex gap-2 mb-4" id="notif-filters">
+  <button class="wt-notif-tab wt-notif-tab-active" data-filter="all">All</button>
+  <button class="wt-notif-tab" data-filter="unread">Unread</button>
+  <button class="wt-notif-tab" data-filter="read">Read</button>
+</div>
+
+<!-- Loading state -->
+<div id="notif-loading" class="wt-card text-center py-5">
+  <div class="spinner-border spinner-border-sm mb-2" style="color:#2563eb;" role="status"></div>
+  <p class="mb-0" style="color:#4a5568; font-size:13px;">Loading notifications...</p>
+</div>
+
+<!-- Empty state -->
+<div id="notif-empty" class="wt-card text-center py-5 d-none">
+  <div style="font-size:36px; margin-bottom:12px;">🔔</div>
+  <p class="mb-1" style="color:#c8d0de; font-size:15px; font-weight:500;">No notifications</p>
+  <p class="mb-0" style="color:#4a5568; font-size:13px;">You're all caught up.</p>
+</div>
+
+<!-- Notifications list -->
+<div id="notif-list" class="d-none" style="display:flex; flex-direction:column; gap:8px;">
+</div>
+
+<script src="{% static 'js/notifications.js' %}"></script>
+{% endblock content %}
+
+

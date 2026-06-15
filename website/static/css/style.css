@@ -1,0 +1,1967 @@
+/* ================================================
+   style.css — WorkTrack
+   Bootstrap handles layout/grid/responsive
+   We handle colors, custom components, dark theme
+   ================================================ */
+
+
+/* ===== BASE ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0d0f14;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  color: #e2e8f0;
+}
+
+
+/* ==============================================
+   NAVBAR
+   Visible on all logged-in pages only
+   ============================================== */
+
+.wt-navbar {
+  background-color: #0d0f14;
+  border-bottom: 1px solid #1e2330;
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: 56px;
+}
+
+.wt-navbar .navbar-brand {
+  color: #ffffff !important;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  margin-right: 32px;
+  padding: 16px 0;
+}
+
+/* All nav links — muted by default */
+.wt-navbar .navbar-nav .nav-link {
+  color: #8892a4;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 18px 14px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.wt-navbar .navbar-nav .nav-link:hover {
+  color: #e2e8f0;
+}
+
+/* Active page — white + blue underline */
+.wt-navbar .navbar-nav .nav-link.active {
+  color: #ffffff !important;
+  border-bottom: 2px solid #2563eb;
+  font-weight: 500;
+}
+
+/* Logout */
+.wt-logout {
+  color: #f87171 !important;
+  padding: 18px 0 18px 4px !important;
+  border-bottom: none !important;
+}
+.wt-logout:hover { color: #ef4444 !important; }
+
+/* Thin vertical line between profile and logout */
+.wt-nav-divider {
+  width: 1px;
+  height: 20px;
+  background-color: #2a2f3d;
+  margin: 0 4px;
+}
+
+/* Profile link — avatar + name side by side */
+.wt-profile-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  padding: 12px 8px;
+}
+
+/* Avatar circle */
+.wt-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #3b4a6b;
+  flex-shrink: 0;
+  background-color: #1e2330;
+}
+
+.wt-profile-link span {
+  color: #c8d0de;
+  font-size: 14px;
+}
+
+.wt-profile-link:hover span { color: #ffffff; }
+.wt-profile-link:hover .wt-avatar { border-color: #2563eb; }
+
+/* Mobile navbar */
+@media (max-width: 991px) {
+  .wt-navbar .navbar-nav .nav-link {
+    padding: 10px 0;
+    border-bottom: none;
+    border-left: 2px solid transparent;
+    padding-left: 8px;
+  }
+  .wt-navbar .navbar-nav .nav-link.active {
+    border-bottom: none;
+    border-left: 2px solid #2563eb;
+  }
+  .wt-nav-divider { display: none; }
+}
+
+
+/* ==============================================
+   AUTH PAGES — login.html and register.html
+   No navbar on these pages
+   ============================================== */
+
+/*
+  wt-auth-page = body class on login and register
+  Sets a slightly different background feel
+*/
+.wt-auth-page {
+  background-color: #0a0c10;
+}
+
+/*
+  Full screen centered wrapper
+  min-height: 100vh = fills full browser height
+  This combined with d-flex + align-items-center +
+  justify-content-center (set in HTML) centers the card
+*/
+.wt-auth-wrapper {
+  min-height: 100vh;
+  padding: 24px 16px;
+}
+
+/*
+  The login/register card box
+  max-width = keeps it from stretching too wide on big screens
+  margin: 0 auto = centers it horizontally
+*/
+.wt-auth-card {
+  background-color: #111520;
+  border: 1px solid #1e2535;
+  border-radius: 14px;
+  padding: 36px 32px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/*
+  Wider card for register — more fields need more space
+  Overrides max-width from wt-auth-card
+*/
+.wt-auth-card--wide {
+  max-width: 600px;
+}
+
+/* WorkTrack logo text on auth pages */
+.wt-auth-logo {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* Warning notice box on register page */
+.wt-notice {
+  background-color: #1f1a08;
+  border: 1px solid #3d3010;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #fbbf24;
+  font-size: 13px;
+}
+
+/* Form labels */
+.wt-label {
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Required star */
+.wt-required {
+  color: #f87171;
+}
+
+/*
+  All text inputs, password, textarea, file
+  !important overrides Bootstrap's default white background
+*/
+.wt-input {
+  background-color: #0d1017 !important;
+  border: 1px solid #1e2535 !important;
+  border-radius: 8px !important;
+  color: #e2e8f0 !important;
+  font-size: 14px !important;
+  padding: 10px 14px !important;
+  transition: border-color 0.15s !important;
+}
+
+/* Input focused state — blue glow */
+.wt-input:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px #2563eb20 !important;
+  outline: none !important;
+  background-color: #0d1017 !important;
+}
+
+/* Placeholder text color */
+.wt-input::placeholder {
+  color: #3d4a5c !important;
+}
+
+/* Hint text below inputs */
+.wt-hint {
+  color: #4a5568;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+/* textarea — allow vertical resize only */
+textarea.wt-input {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Error message box */
+.wt-form-error {
+  background-color: #2a0f0f;
+  border: 1px solid #3d1515;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #f87171;
+  font-size: 13px;
+}
+
+/* Primary button — used on login and register */
+.wt-btn-primary {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 11px;
+  transition: background-color 0.15s;
+}
+
+.wt-btn-primary:hover {
+  background-color: #1d4ed8;
+  color: #ffffff;
+}
+
+.wt-btn-primary:active {
+  background-color: #1e40af;
+  color: #ffffff;
+}
+
+/* Links on auth pages */
+.wt-link {
+  color: #60a5fa;
+  text-decoration: none;
+}
+.wt-link:hover {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+
+/* Success icon circle on register confirmation */
+.wt-success-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #0d2b1a;
+  border: 2px solid #166534;
+  color: #4ade80;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+
+/* ==============================================
+   DASHBOARD — shared card styles
+   ============================================== */
+
+.wt-greeting {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.wt-col-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #c8d0de;
+}
+
+.wt-card {
+  background-color: #131720;
+  border: 1px solid #1e2330;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+/* Task cards inside columns */
+.wt-task-card {
+  background-color: #1a1f2e;
+  border: 1px solid #252b3b;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #c8d0de;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* Bullet dot before each task — from wireframe */
+.wt-task-card::before {
+  content: '●';
+  color: #3b4a6b;
+  font-size: 8px;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.wt-task-card:hover {
+  border-color: #2563eb60;
+  background-color: #1e2438;
+}
+
+/* Count badges */
+.wt-badge {
+  font-size: 13px;
+  font-weight: 600;
+}
+.wt-badge-pending { color: #fb923c; }
+.wt-badge-review  { color: #60a5fa; }
+.wt-badge-done    { color: #4ade80; }
+
+/* Attendance button — small outlined style from wireframe */
+.wt-btn-attend {
+  background-color: transparent;
+  color: #c8d0de;
+  border: 1px solid #2a2f3d;
+  border-radius: 8px;
+  font-size: 13px;
+  padding: 7px 16px;
+  transition: border-color 0.15s, color 0.15s;
+}
+.wt-btn-attend:hover {
+  border-color: #2563eb;
+  color: #ffffff;
+}
+.wt-btn-attend-done {
+  background-color: #0d2b1a !important;
+  border-color: #166534 !important;
+  color: #4ade80 !important;
+  cursor: not-allowed;
+}
+
+#attend-msg {
+  color: #8892a4;
+  font-size: 12.5px;
+}
+
+/* Manager stat numbers */
+.wt-stat-number {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Absent badge */
+.wt-absent-badge {
+  background-color: #1a0f0f;
+  color: #f87171;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  border: 1px solid #3d1515;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wt-absent-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #f87171;
+  flex-shrink: 0;
+}
+
+
+/* ==============================================
+   RESPONSIVE TWEAKS
+   ============================================== */
+
+@media (max-width: 768px) {
+  .wt-card { padding: 16px; }
+  .wt-greeting { font-size: 1.3rem; }
+  .wt-stat-number { font-size: 1.8rem; }
+  .wt-auth-card { padding: 24px 20px; }
+}
+
+
+/* ==============================================
+   LOGOUT CONFIRMATION MODAL
+   ============================================== */
+
+/*
+  .wt-modal = the dark card inside the popup
+  Bootstrap handles the backdrop/overlay automatically
+*/
+.wt-modal {
+  background-color: #131720;
+  border: 1px solid #1e2330;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+/* Icon circle at top of modal */
+.wt-modal-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: #1a1f2e;
+  border: 1px solid #252b3b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 20px;
+}
+
+/* Cancel button — outlined style */
+.wt-modal-btn-cancel {
+  background-color: transparent;
+  border: 1px solid #2a2f3d;
+  color: #94a3b8;
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 9px;
+  transition: border-color 0.15s, color 0.15s;
+}
+.wt-modal-btn-cancel:hover {
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+/* Logout confirm button — red */
+.wt-modal-btn-logout {
+  background-color: #7f1d1d;
+  border: 1px solid #991b1b;
+  color: #fca5a5;
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 9px;
+  transition: background-color 0.15s;
+}
+.wt-modal-btn-logout:hover {
+  background-color: #991b1b;
+  color: #ffffff;
+}
+
+
+/* ==============================================
+   APPLICATIONS PAGE
+   ============================================== */
+
+/* Page badge — "4 Pending" in header */
+.wt-page-badge {
+  background-color: #1e3a5f;
+  color: #60a5fa;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Each applicant card on the list page */
+.wt-app-card {
+  background-color: #131720;
+  border: 1px solid #1e2330;
+  border-radius: 12px;
+  padding: 20px 24px;
+  transition: border-color 0.15s;
+}
+
+.wt-app-card:hover {
+  border-color: #2a3a5a;
+}
+
+/* Applied date text */
+.wt-applied-date {
+  color: #4a5568;
+  font-size: 12px;
+}
+
+/* Skill pill badges */
+.wt-skill-badge {
+  background-color: #1a2035;
+  color: #60a5fa;
+  border: 1px solid #1e3a5f;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Check Out button on list page */
+.wt-btn-checkout {
+  background-color: transparent;
+  border: 1px solid #2a2f3d;
+  color: #c8d0de;
+  border-radius: 8px;
+  font-size: 13px;
+  padding: 7px 16px;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.wt-btn-checkout:hover {
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+/* Empty state icon */
+.wt-empty-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #0d2b1a;
+  border: 2px solid #166534;
+  color: #4ade80;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* Back link on detail page */
+.wt-back-link {
+  color: #60a5fa;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.15s;
+}
+
+.wt-back-link:hover {
+  color: #93c5fd;
+}
+
+/* Pending status badge on detail page */
+.wt-status-badge {
+  background-color: #1f1a08;
+  color: #fbbf24;
+  border: 1px solid #3d3010;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Small label above detail fields */
+.wt-detail-label {
+  color: #4a5568;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+/* Approve button — green */
+.wt-btn-approve {
+  background-color: #0d2b1a;
+  border: 1px solid #166534;
+  color: #4ade80;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 11px;
+  transition: background-color 0.15s;
+}
+
+.wt-btn-approve:hover {
+  background-color: #14532d;
+  color: #4ade80;
+}
+
+/* Reject button — red */
+.wt-btn-reject {
+  background-color: #2a0f0f;
+  border: 1px solid #7f1d1d;
+  color: #f87171;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 11px;
+  transition: background-color 0.15s;
+}
+
+.wt-btn-reject:hover {
+  background-color: #450a0a;
+  color: #fca5a5;
+}
+
+
+/* ==============================================
+   MANAGER DASHBOARD — absent list scrollable
+   Shows 5 names then scrolls
+   ============================================== */
+
+#absent-list {
+  /* each badge on its own row — cleaner for scrolling */
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  /* 5 badges visible (each ~32px tall + 6px gap = ~38px per row) */
+  max-height: 190px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* Custom scrollbar — thin and dark to match theme */
+#absent-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+#absent-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#absent-list::-webkit-scrollbar-thumb {
+  background-color: #2a2f3d;
+  border-radius: 4px;
+}
+
+#absent-list::-webkit-scrollbar-thumb:hover {
+  background-color: #3b4a6b;
+}
+
+
+/* ==============================================
+   TASKS PAGE — KANBAN BOARD
+   ============================================== */
+
+/*
+  Kanban wrapper
+  display: flex = columns sit side by side
+  overflow-x: auto = horizontal scroll when columns overflow screen
+  gap = space between columns
+  padding-bottom = space for scrollbar
+  align-items: flex-start = columns don't stretch to equal height
+*/
+.wt-kanban-wrapper {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  align-items: flex-start;
+}
+
+/* Thin scrollbar on kanban wrapper */
+.wt-kanban-wrapper::-webkit-scrollbar {
+  height: 4px;
+}
+.wt-kanban-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+.wt-kanban-wrapper::-webkit-scrollbar-thumb {
+  background-color: #2a2f3d;
+  border-radius: 4px;
+}
+
+/*
+  Each kanban column
+  flex-shrink: 0 = columns never compress, they scroll instead
+  width: 240px = fixed width per column
+*/
+.wt-kanban-col {
+  flex-shrink: 0;
+  width: 240px;
+  background-color: #0f1219;
+  border: 1px solid #1e2330;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+/* Failed/Missed column — red tinted border */
+.wt-col-failed {
+  border-color: #3d1515;
+}
+
+/* Column count badge */
+.wt-col-count {
+  background-color: #1a1f2e;
+  color: #8892a4;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  min-width: 24px;
+  text-align: center;
+}
+
+/*
+  Column body — scrollable area for cards
+  max-height = show ~5 cards then scroll
+  min-height = empty columns have some height for dropping
+*/
+.wt-col-body {
+  max-height: 520px;
+  min-height: 60px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wt-col-body::-webkit-scrollbar { width: 3px; }
+.wt-col-body::-webkit-scrollbar-track { background: transparent; }
+.wt-col-body::-webkit-scrollbar-thumb {
+  background-color: #2a2f3d;
+  border-radius: 4px;
+}
+
+/*
+  Task card inside kanban
+  Overrides the dashboard version with slightly different padding
+*/
+.wt-kanban-col .wt-task-card {
+  background-color: #131720;
+  border: 1px solid #1e2330;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: grab;
+  display: block;     /* override dashboard flex style */
+  transition: border-color 0.15s, transform 0.1s, box-shadow 0.15s;
+  user-select: none;  /* prevent text selection while dragging */
+}
+
+.wt-kanban-col .wt-task-card::before {
+  display: none; /* remove dashboard bullet dot */
+}
+
+.wt-kanban-col .wt-task-card:hover {
+  border-color: #2563eb60;
+}
+
+/* Task title inside card */
+.wt-task-title {
+  color: #e2e8f0;
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Due date inside card */
+.wt-task-date {
+  color: #4a5568;
+  font-size: 11.5px;
+}
+
+/*
+  Card being dragged
+  opacity = semi-transparent so user sees where it came from
+  transform = slight scale down looks polished
+  cursor: grabbing = changes cursor while dragging
+*/
+.wt-dragging {
+  opacity: 0.4;
+  transform: scale(0.98);
+  cursor: grabbing;
+}
+
+/*
+  Column highlighted when dragging over it
+  border-color + background change gives clear visual feedback
+*/
+.wt-drag-over {
+  border-color: #2563eb !important;
+  background-color: #0d1525 !important;
+}
+
+/* Priority dot + text */
+.wt-priority-dot {
+  font-size: 11.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Small colored circle dot */
+.wt-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Priority text colors */
+.wt-priority-high   { color: #f87171; }
+.wt-priority-medium { color: #fb923c; }
+.wt-priority-low    { color: #4ade80; }
+
+
+/* ==============================================
+   MANAGER KANBAN — employee columns
+   ============================================== */
+
+/* Manager columns slightly wider than employee columns */
+.wt-manager-col {
+  width: 260px;
+}
+
+
+/* ==============================================
+   ASSIGN TASK MODAL
+   ============================================== */
+
+/* Close X button top right of modal */
+.wt-modal-close {
+  background: none;
+  border: none;
+  color: #4a5568;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s;
+}
+.wt-modal-close:hover { color: #e2e8f0; }
+
+/* Filter dropdown on manager view */
+.wt-select {
+  background-color: #0d1017;
+  border: 1px solid #1e2535;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 13px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.wt-select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+/* Priority toggle pill buttons in assign modal */
+.wt-priority-btn {
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #2a2f3d;
+  color: #8892a4;
+  background-color: transparent;
+  transition: all 0.15s;
+  user-select: none;
+}
+
+/* When the hidden radio is checked, style the label as active */
+input[name="priority"]:checked + .wt-priority-btn {
+  border-color: currentColor;
+  background-color: #1a1f2e;
+}
+
+input#p-high:checked   + .wt-priority-high   { color: #f87171; border-color: #f87171; }
+input#p-medium:checked + .wt-priority-medium { color: #fb923c; border-color: #fb923c; }
+input#p-low:checked    + .wt-priority-low    { color: #4ade80; border-color: #4ade80; }
+
+.wt-priority-high:hover   { color: #f87171; border-color: #f87171; }
+.wt-priority-medium:hover { color: #fb923c; border-color: #fb923c; }
+.wt-priority-low:hover    { color: #4ade80; border-color: #4ade80; }
+
+
+/* ==============================================
+   INPUT WITH ICON (project link field)
+   ============================================== */
+
+/*
+  Wrapper — position relative so the icon can sit
+  inside the input on the left side
+*/
+.wt-input-with-icon {
+  position: relative;
+}
+
+/* The icon inside the input */
+.wt-input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  pointer-events: none; /* click goes through to input */
+  z-index: 1;
+}
+
+/* Input with left padding to make room for the icon */
+.wt-input-has-icon {
+  padding-left: 36px !important;
+}
+
+
+/* ==============================================
+   PROJECT LINK on task card
+   ============================================== */
+
+.wt-task-link {
+  color: #60a5fa;
+  font-size: 12px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.15s;
+}
+
+.wt-task-link:hover {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+
+
+/* ==============================================
+   OVERVIEW PAGE
+   ============================================== */
+
+.wt-overview-stat {
+  padding: 16px !important;
+}
+
+.wt-overview-stat-label {
+  color: #4a5568;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+/* Table container card */
+.wt-table-header {
+  border-bottom: 1px solid #1e2330;
+  background-color: #0f1219;
+}
+
+/* Search input in table header */
+.wt-search-input {
+  background-color: #0d1017;
+  border: 1px solid #1e2535;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 13px;
+  padding: 6px 12px;
+  width: 200px;
+  transition: border-color 0.15s;
+}
+.wt-search-input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+.wt-search-input::placeholder { color: #3d4a5c; }
+
+/* Table styles */
+.wt-table {
+  color: #c8d0de;
+  font-size: 13px;
+  /* force dark background — overrides Bootstrap white */
+  --bs-table-bg: transparent;
+  --bs-table-striped-bg: transparent;
+  --bs-table-hover-bg: transparent;
+}
+
+/* Force every cell dark — Bootstrap adds white via inline styles */
+.wt-table td,
+.wt-table th {
+  background-color: #131720 !important;
+}
+
+.wt-table thead th {
+  background-color: #0f1219 !important;
+  color: #4a5568;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-color: #1e2330 !important;
+  padding: 12px 16px;
+  white-space: nowrap;
+}
+
+.wt-table-row td {
+  border-color: #1a1f2e !important;
+  padding: 14px 16px;
+  vertical-align: middle;
+  background-color: #131720 !important;
+}
+
+.wt-table-row:hover td {
+  background-color: #1a1f2e !important;
+}
+
+/* Avatar circle with initial letter */
+.wt-table-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #1e2535;
+  border: 1px solid #2a3a5a;
+  color: #60a5fa;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Present / Absent status pills */
+.wt-status-present {
+  color: #4ade80;
+  font-size: 12px;
+  font-weight: 500;
+}
+.wt-status-absent {
+  color: #f87171;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Check-in time */
+.wt-checkin-time {
+  color: #60a5fa;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Performance bar */
+.wt-perf-bar-wrap {
+  width: 80px;
+  height: 6px;
+  background-color: #1e2330;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.wt-perf-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.4s ease;
+}
+
+
+/* ==============================================
+   ATTENDANCE PAGE
+   ============================================== */
+
+/* Live clock display */
+.wt-clock {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Time row — label on left, value on right */
+.wt-time-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #1a1f2e;
+}
+
+.wt-time-row:last-child { border-bottom: none; }
+
+.wt-time-label {
+  color: #4a5568;
+  font-size: 13px;
+}
+
+.wt-time-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #c8d0de;
+}
+
+.wt-time-green { color: #4ade80; }
+
+/* Check-in button — blue */
+.wt-btn-checkin {
+  background-color: #2563eb;
+  border: none;
+  color: #ffffff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px;
+  transition: background-color 0.15s;
+}
+.wt-btn-checkin:hover:not(:disabled) {
+  background-color: #1d4ed8;
+  color: #ffffff;
+}
+
+/* After checked in state */
+.wt-btn-checked-in {
+  background-color: #0d2b1a !important;
+  border: 1px solid #166534 !important;
+  color: #4ade80 !important;
+  cursor: not-allowed;
+}
+
+/* Check-out button — outlined */
+.wt-btn-checkout-att {
+  background-color: transparent;
+  border: 1px solid #2a2f3d;
+  color: #8892a4;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px;
+  transition: all 0.15s;
+}
+.wt-btn-checkout-att:hover:not(:disabled) {
+  border-color: #f87171;
+  color: #f87171;
+}
+.wt-btn-checkout-att:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* After checked out state */
+.wt-btn-checked-out {
+  background-color: #2a0f0f !important;
+  border-color: #7f1d1d !important;
+  color: #f87171 !important;
+  cursor: not-allowed;
+  opacity: 1 !important;
+}
+
+/* Late arrival warning badge */
+.wt-late-badge {
+  background-color: #1f1a08;
+  border: 1px solid #3d3010;
+  color: #fbbf24;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+
+/* ==============================================
+   ATTENDANCE CALENDAR
+   ============================================== */
+
+/* Month navigation arrows */
+.wt-cal-nav {
+  background: none;
+  border: 1px solid #1e2330;
+  color: #8892a4;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.wt-cal-nav:hover {
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+/* Day names row: Sun Mon Tue... */
+.wt-cal-days-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 8px;
+}
+.wt-cal-days-header span {
+  color: #4a5568;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 4px 0;
+}
+
+/*
+  Calendar grid — 7 columns (one per day of week)
+  auto-fill rows based on number of cells
+*/
+.wt-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+/* Each day cell */
+.wt-cal-cell {
+  aspect-ratio: 1;       /* keep it square */
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4a5568;
+  cursor: default;
+  transition: background-color 0.1s;
+  position: relative;
+}
+
+/* Empty cells (before 1st of month) */
+.wt-cal-empty { background: transparent; }
+
+/* Present day — green */
+.wt-cal-present {
+  background-color: #0d2b1a;
+  color: #4ade80;
+  border: 1px solid #166534;
+}
+
+/* Absent day — red */
+.wt-cal-absent {
+  background-color: #2a0f0f;
+  color: #f87171;
+  border: 1px solid #7f1d1d;
+}
+
+/* Late arrival — orange */
+.wt-cal-late {
+  background-color: #1f1208;
+  color: #fb923c;
+  border: 1px solid #92400e;
+}
+
+/* Today — blue ring */
+.wt-cal-today {
+  background-color: #1e3a5f;
+  color: #60a5fa;
+  border: 2px solid #2563eb;
+  font-weight: 700;
+}
+
+/* Future/no record days — subtle */
+.wt-cal-cell:not(.wt-cal-present):not(.wt-cal-absent):not(.wt-cal-late):not(.wt-cal-today):not(.wt-cal-empty) {
+  background-color: #0f1219;
+  color: #4a5568;
+}
+
+/* Calendar legend */
+.wt-cal-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #8892a4;
+  font-size: 12px;
+}
+
+.wt-cal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.wt-dot-present { background-color: #0d2b1a; border: 1px solid #166534; }
+.wt-dot-absent  { background-color: #2a0f0f; border: 1px solid #7f1d1d; }
+.wt-dot-late    { background-color: #1f1208; border: 1px solid #92400e; }
+.wt-dot-today   { background-color: #1e3a5f; border: 1px solid #2563eb; }
+
+
+/* ==============================================
+   MANAGER ATTENDANCE PAGE
+   ============================================== */
+
+/* Today cards — present and absent side by side */
+.wt-today-card {
+  min-height: 100px;
+}
+
+.wt-today-present {
+  border-left: 3px solid #166534 !important;
+}
+
+.wt-today-absent {
+  border-left: 3px solid #7f1d1d !important;
+}
+
+/* Inline dot before section title */
+.wt-dot-inline {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+.wt-dot-green { background-color: #4ade80; }
+.wt-dot-red   { background-color: #f87171; }
+
+/* Name badges in today view */
+.wt-today-badge {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.wt-today-badge-present {
+  background-color: #0d2b1a;
+  color: #4ade80;
+  border: 1px solid #166534;
+}
+
+.wt-today-badge-absent {
+  background-color: #2a0f0f;
+  color: #f87171;
+  border: 1px solid #7f1d1d;
+}
+
+/* Export CSV button */
+.wt-btn-export {
+  background-color: transparent;
+  border: 1px solid #2a2f3d;
+  color: #c8d0de;
+  border-radius: 8px;
+  font-size: 13px;
+  padding: 7px 16px;
+  transition: all 0.15s;
+}
+.wt-btn-export:hover {
+  border-color: #4ade80;
+  color: #4ade80;
+}
+
+/* Ghost/clear button */
+.wt-btn-ghost {
+  background-color: transparent;
+  border: 1px solid #2a2f3d;
+  color: #8892a4;
+  border-radius: 8px;
+  font-size: 13px;
+  padding: 6px 14px;
+  transition: all 0.15s;
+}
+.wt-btn-ghost:hover {
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+
+/* ==============================================
+   TASK DETAIL MODAL
+   ============================================== */
+
+/* Section label — small uppercase gray */
+.wt-detail-section-label {
+  color: #4a5568;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+/* Section block with subtle top border */
+.wt-detail-section {
+  padding-top: 4px;
+}
+
+/* Priority badge in modal header */
+.wt-detail-priority-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid currentColor;
+  background-color: transparent;
+}
+
+/* Status badge in modal header */
+.wt-detail-status-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid currentColor;
+  background-color: transparent;
+}
+
+/* Horizontal divider */
+.wt-divider {
+  border-color: #1e2330;
+  margin: 20px 0;
+}
+
+/* Employee status update buttons */
+.wt-status-btn {
+  background-color: transparent;
+  border: 1px solid #2a2f3d;
+  color: #8892a4;
+  border-radius: 6px;
+  font-size: 13px;
+  padding: 6px 14px;
+  transition: all 0.15s;
+}
+
+.wt-status-btn:hover {
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+/* Active/selected status button */
+.wt-status-btn-active {
+  background-color: #1e3a5f !important;
+  border-color: #2563eb !important;
+  color: #60a5fa !important;
+}
+
+
+/* ==============================================
+   PROFILE PAGE
+   ============================================== */
+
+/* Top card — slightly different feel, centered content */
+.wt-profile-top-card {
+  padding: 36px 24px 28px;
+}
+
+/* Avatar wrapper — controls size and ring */
+.wt-profile-avatar-wrap {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  position: relative;
+  /* Outer blue ring */
+  box-shadow: 0 0 0 3px #1e2535, 0 0 0 5px #2563eb40;
+}
+
+/* Large profile avatar circle */
+.wt-profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Fallback — shows initial letter if image fails */
+.wt-profile-avatar-fallback {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #1e2535;
+  border: 2px solid #2a3a5a;
+  color: #60a5fa;
+  font-size: 36px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Active avatar ring — on profile page itself */
+.wt-avatar-active {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px #2563eb40;
+}
+
+/* Role badge */
+.wt-role-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.wt-role-badge-employee {
+  background-color: #1e3a5f;
+  color: #60a5fa;
+  border: 1px solid #2563eb40;
+}
+
+.wt-role-badge-manager {
+  background-color: #2d1a4a;
+  color: #c084fc;
+  border: 1px solid #7c3aed40;
+}
+
+/* Info labels and values in top card */
+.wt-profile-info-label {
+  color: #4a5568;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.wt-profile-info-value {
+  color: #e2e8f0;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+/* Larger skill badge for profile page */
+.wt-skill-badge-lg {
+  padding: 6px 14px !important;
+  font-size: 13px !important;
+  border-radius: 8px !important;
+}
+
+/* Stat block — icon + number + label stacked */
+.wt-stat-block {
+  text-align: center;
+}
+
+/* Icon circle above stat number */
+.wt-stat-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin: 0 auto 10px;
+}
+
+.wt-stat-icon-blue   { background-color: #1e3a5f; color: #60a5fa; }
+.wt-stat-icon-orange { background-color: #1f1208; color: #fb923c; }
+.wt-stat-icon-green  { background-color: #0d2b1a; color: #4ade80; }
+.wt-stat-icon-red    { background-color: #2a0f0f; color: #f87171; }
+
+/* Large stat number */
+.wt-stat-big {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Stat label below number */
+.wt-stat-label {
+  color: #4a5568;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+
+/* ==============================================
+   PROFILE PAGE
+   ============================================== */
+
+.wt-profile-top-card {
+  padding: 36px 24px 28px;
+}
+
+/* Avatar wrapper */
+.wt-profile-avatar-wrap {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 0 0 3px #1e2535, 0 0 0 5px #2563eb40;
+}
+
+.wt-profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Fallback initial letter */
+.wt-profile-avatar-fallback {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #1e2535;
+  border: 2px solid #2a3a5a;
+  color: #60a5fa;
+  font-size: 36px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*
+  Camera overlay — shows on hover over avatar
+  position: absolute covers the circle
+  opacity: 0 by default, 1 on hover
+*/
+.wt-avatar-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  gap: 2px;
+}
+
+.wt-profile-avatar-wrap:hover .wt-avatar-overlay {
+  opacity: 1;
+}
+
+.wt-avatar-overlay-icon { font-size: 18px; }
+.wt-avatar-overlay-text {
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Active avatar ring on profile page */
+.wt-avatar-active {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px #2563eb40;
+}
+
+/* Role badges */
+.wt-role-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.wt-role-badge-employee {
+  background-color: #1e3a5f;
+  color: #60a5fa;
+  border: 1px solid #2563eb40;
+}
+
+.wt-role-badge-manager {
+  background-color: #2d1a4a;
+  color: #c084fc;
+  border: 1px solid #7c3aed40;
+}
+
+/* Profile info labels/values */
+.wt-profile-info-label {
+  color: #4a5568;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.wt-profile-info-value {
+  color: #e2e8f0;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+/* Larger skill badge */
+.wt-skill-badge-lg {
+  padding: 6px 14px !important;
+  font-size: 13px !important;
+  border-radius: 8px !important;
+}
+
+/* Social links row */
+.wt-social-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Icon circle */
+.wt-social-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wt-social-github  { background-color: #1a1f2e; color: #e2e8f0; border: 1px solid #252b3b; }
+.wt-social-linkedin{ background-color: #0a1929; color: #60a5fa; border: 1px solid #1e3a5f; }
+
+/* Label above link */
+.wt-social-label {
+  color: #4a5568;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 2px;
+}
+
+/* Link text */
+.wt-social-link {
+  font-size: 13px;
+  text-decoration: none;
+  word-break: break-all;
+  transition: color 0.15s;
+}
+.wt-social-link:hover { text-decoration: underline; color: #93c5fd; }
+
+/* Small ghost button for Edit */
+.wt-btn-ghost-sm {
+  background: transparent;
+  border: 1px solid #2a2f3d;
+  color: #8892a4;
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 4px 12px;
+  transition: all 0.15s;
+}
+.wt-btn-ghost-sm:hover {
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+/* Stat blocks */
+.wt-stat-block { text-align: center; }
+
+.wt-stat-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin: 0 auto 10px;
+}
+
+.wt-stat-icon-blue   { background-color: #1e3a5f; color: #60a5fa; }
+.wt-stat-icon-orange { background-color: #1f1208; color: #fb923c; }
+.wt-stat-icon-green  { background-color: #0d2b1a; color: #4ade80; }
+.wt-stat-icon-red    { background-color: #2a0f0f; color: #f87171; }
+
+.wt-stat-big {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.wt-stat-label {
+  color: #4a5568;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+/* ==============================================
+   NOTIFICATIONS PAGE
+   ============================================== */
+
+/* Filter tab buttons */
+.wt-notif-tab {
+  background-color: transparent;
+  border: 1px solid #1e2330;
+  color: #8892a4;
+  border-radius: 8px;
+  font-size: 13px;
+  padding: 6px 16px;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.wt-notif-tab:hover {
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+.wt-notif-tab-active {
+  background-color: #1e3a5f;
+  border-color: #2563eb;
+  color: #60a5fa;
+}
+
+/* Single notification row */
+.wt-notif-item {
+  background-color: #131720;
+  border: 1px solid #1e2330;
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+/* Unread item — slightly brighter background + blue border tint */
+.wt-notif-item-unread {
+  background-color: #0f1520;
+  border-color: #1e3a5f;
+}
+
+.wt-notif-item:hover {
+  border-color: #2a3a5a;
+  background-color: #151c2a;
+}
+
+/* Dot column — aligns the indicator circle */
+.wt-notif-dot-wrap {
+  padding-top: 4px;
+  flex-shrink: 0;
+}
+
+/* The blue/grey dot indicator */
+.wt-notif-dot {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #2563eb;
+  flex-shrink: 0;
+}
+
+.wt-notif-dot-read {
+  background-color: #2a2f3d;
+}
+
+/* Message + timestamp block */
+.wt-notif-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.wt-notif-msg {
+  color: #c8d0de;
+  font-size: 14px;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+.wt-notif-item-unread .wt-notif-msg {
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.wt-notif-time {
+  color: #4a5568;
+  font-size: 12px;
+}
+
+/* Small tick button on unread items */
+.wt-notif-read-btn {
+  background-color: transparent;
+  border: 1px solid #2a2f3d;
+  color: #4a5568;
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 3px 9px;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  cursor: pointer;
+  align-self: center;
+}
+
+.wt-notif-read-btn:hover {
+  border-color: #2563eb;
+  color: #60a5fa;
+}
+
+/* TOAST */
+#wt-toast-container {
+  position: fixed; top: 70px; right: 20px;
+  z-index: 9999; display: flex; flex-direction: column;
+  gap: 10px; pointer-events: none;
+}
+.wt-toast {
+  pointer-events: all; position: relative; overflow: hidden;
+  display: flex; align-items: flex-start; gap: 12px;
+  background-color: #131720; border: 1px solid #1e2330;
+  border-radius: 10px; padding: 13px 16px;
+  min-width: 280px; max-width: 340px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  transform: translateX(120%); opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1), opacity 0.25s ease;
+}
+.wt-toast.wt-toast-show { transform: translateX(0); opacity: 1; }
+.wt-toast.wt-toast-hide { transform: translateX(120%); opacity: 0; }
+.wt-toast-icon {
+  width: 30px; height: 30px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.wt-toast-icon-success { background-color: #0d2b1a; color: #4ade80; }
+.wt-toast-icon-error   { background-color: #2a0f0f; color: #f87171; }
+.wt-toast-icon-info    { background-color: #1e3a5f; color: #60a5fa; }
+.wt-toast-icon-warning { background-color: #1f1208; color: #fb923c; }
+.wt-toast-content { flex: 1; min-width: 0; }
+.wt-toast-title { font-size: 13.5px; font-weight: 500; color: #e2e8f0; margin: 0 0 2px; }
+.wt-toast-msg   { font-size: 12.5px; color: #8892a4; margin: 0; line-height: 1.4; }
+.wt-toast-close {
+  background: none; border: none; color: #4a5568;
+  font-size: 18px; cursor: pointer; padding: 0;
+  margin-left: auto; flex-shrink: 0; line-height: 1;
+  transition: color 0.15s;
+}
+.wt-toast-close:hover { color: #e2e8f0; }
+.wt-toast-bar {
+  position: absolute; bottom: 0; left: 0; height: 2px;
+  width: 100%; border-radius: 0 0 10px 10px;
+  transform-origin: left;
+  animation: wt-shrink linear forwards;
+}
+@keyframes wt-shrink { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+.wt-toast-bar-success { background-color: #4ade80; }
+.wt-toast-bar-error   { background-color: #f87171; }
+.wt-toast-bar-info    { background-color: #2563eb; }
+.wt-toast-bar-warning { background-color: #fb923c; }

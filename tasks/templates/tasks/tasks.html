@@ -1,0 +1,313 @@
+{% extends "website/base.html" %}
+{% load static %}
+{% block content %}
+  <!-- PAGE CONTENT -->
+  <div class="container-fluid px-4 py-4">
+
+    <!-- Page header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h4 class="wt-greeting mb-1">Tasks</h4>
+        <p id="tasks-subtitle" class="text-secondary small mb-0"></p>
+      </div>
+
+      <!--
+        Assign Task button — manager only
+        d-none by default, tasks.js shows it for managers
+      -->
+      <button id="assign-task-btn" class="btn wt-btn-primary d-none px-4">
+        + Assign Task
+      </button>
+    </div>
+
+
+    <!-- ===== EMPLOYEE VIEW — 5 column kanban ===== -->
+    <!--
+      overflow-x: auto on the wrapper allows horizontal scroll
+      when all 5 columns don't fit on screen
+    -->
+    <div id="employee-tasks" class="wt-kanban-wrapper">
+      <!--
+        tasks.js builds all 5 columns here dynamically
+        Each column is a droppable zone
+      -->
+    </div>
+
+
+    <!-- ===== MANAGER VIEW ===== -->
+    <!--
+      d-none by default
+      tasks.js shows this and hides employee-tasks for managers
+    -->
+    <div id="manager-tasks" class="d-none">
+
+      <!-- Filter dropdown -->
+      <div class="d-flex align-items-center gap-3 mb-4">
+        <label class="text-secondary small mb-0">Filter by employee:</label>
+        <!--
+          id="employee-filter" — tasks.js listens for change
+          on this to show/hide individual employee columns
+        -->
+        <select id="employee-filter" class="wt-select">
+          <option value="all">All Employees</option>
+          <!-- tasks.js fills in employee options dynamically -->
+        </select>
+      </div>
+
+      <!--
+        Manager kanban — each column = one employee
+        tasks.js builds columns here
+        overflow-x: auto handles horizontal scroll
+      -->
+      <div id="manager-kanban" class="wt-kanban-wrapper"></div>
+
+    </div>
+
+
+    <!-- ===== ASSIGN TASK MODAL — manager only ===== -->
+    <!--
+      This modal is always in the HTML (not injected by JS)
+      because it's only on this page
+      The "Assign Task" button triggers it via data-bs-toggle
+    -->
+    <div class="modal fade" id="assignTaskModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content wt-modal">
+          <div class="modal-body p-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h6 class="text-white mb-0 fw-semibold">Assign New Task</h6>
+              <!--
+                data-bs-dismiss="modal" = Bootstrap closes modal on click
+              -->
+              <button type="button" class="wt-modal-close" data-bs-dismiss="modal">✕</button>
+            </div>
+
+            <!-- Task Title -->
+            <div class="mb-3">
+              <label class="wt-label">Title <span class="wt-required">*</span></label>
+              <input type="text" id="task-title" class="form-control wt-input" placeholder="e.g. Fix login page bug"/>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <label class="wt-label">Description</label>
+              <textarea id="task-desc" class="form-control wt-input" rows="3" placeholder="Describe the task..."></textarea>
+            </div>
+
+            <!-- Assign To + Due Date side by side on desktop -->
+            <div class="row g-3 mb-3">
+
+              <div class="col-12 col-md-6">
+                <label class="wt-label">Assign To <span class="wt-required">*</span></label>
+                <!--
+                  id="task-assignee" — tasks.js fills this with
+                  employee names from MANAGER_TASKS_DATA
+                -->
+                <select id="task-assignee" class="form-control wt-input">
+                  <option value="">Select employee...</option>
+                </select>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="wt-label">Due Date <span class="wt-required">*</span></label>
+                <input type="date" id="task-due" class="form-control wt-input"/>
+              </div>
+
+            </div>
+
+            <!-- Priority -->
+            <div class="mb-4">
+              <label class="wt-label">Priority <span class="wt-required">*</span></label>
+              <div class="d-flex gap-2">
+                <!--
+                  Priority radio buttons styled as toggle pills
+                  wt-priority-btn = custom pill style
+                  input is hidden, label acts as the button
+                -->
+                <input type="radio" name="priority" id="p-high"   value="high"   class="d-none"/>
+                <label for="p-high"   class="wt-priority-btn wt-priority-high">High</label>
+
+                <input type="radio" name="priority" id="p-medium" value="medium" class="d-none"/>
+                <label for="p-medium" class="wt-priority-btn wt-priority-medium">Medium</label>
+
+                <input type="radio" name="priority" id="p-low"    value="low"    class="d-none"/>
+                <label for="p-low"    class="wt-priority-btn wt-priority-low">Low</label>
+              </div>
+            </div>
+
+            <!-- Project Link -->
+            <div class="mb-4">
+              <label class="wt-label">Project Link</label>
+              <!--
+                Optional field — GitHub repo, Google Drive, or any URL
+                the employee needs to work on this task
+              -->
+              <div class="wt-input-with-icon">
+                <span class="wt-input-icon">🔗</span>
+                <input
+                  type="url"
+                  id="task-link"
+                  class="form-control wt-input wt-input-has-icon"
+                  placeholder="https://github.com/repo or Drive link"
+                />
+              </div>
+              <p class="wt-hint">GitHub, Google Drive, Figma, or any project URL</p>
+            </div>
+
+            <!-- Error -->
+            <div id="task-error" class="wt-form-error d-none mb-3">
+              Please fill in all required fields.
+            </div>
+
+            <!-- Submit -->
+            <button id="assign-task-submit" class="btn wt-btn-primary w-100">
+              Assign Task
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end assign task modal -->
+
+
+    <!-- ===== TASK DETAIL MODAL ===== -->
+    <!--
+      Opens when any task card is clicked
+      tasks.js fills all fields dynamically based on which card was clicked
+      Employee sees: read-only view
+      Manager sees: same + assigned-to info + edit controls
+    -->
+    <div class="modal fade" id="taskDetailModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content wt-modal">
+          <div class="modal-body p-4">
+
+            <!-- Modal header — title + close -->
+            <div class="d-flex justify-content-between align-items-start mb-4">
+              <div class="flex-grow-1 me-3">
+                <!-- Priority badge + title -->
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <span id="detail-priority-badge" class="wt-detail-priority-badge"></span>
+                  <span id="detail-status-badge" class="wt-detail-status-badge"></span>
+                </div>
+                <h5 id="detail-title" class="text-white mb-0 fw-semibold"></h5>
+              </div>
+              <button type="button" class="wt-modal-close" data-bs-dismiss="modal">✕</button>
+            </div>
+
+            <!-- Description -->
+            <div class="wt-detail-section mb-4">
+              <p class="wt-detail-section-label">Description</p>
+              <p id="detail-description" class="text-secondary mb-0" style="line-height:1.7; font-size:14px;"></p>
+            </div>
+
+            <!-- Info grid — due date, assigned by, assigned to -->
+            <div class="row g-3 mb-4">
+
+              <div class="col-6 col-md-3">
+                <p class="wt-detail-section-label">Due Date</p>
+                <p id="detail-due" class="text-white small mb-0 fw-medium"></p>
+              </div>
+
+              <div class="col-6 col-md-3">
+                <p class="wt-detail-section-label">Assigned By</p>
+                <p id="detail-assigned-by" class="text-white small mb-0 fw-medium"></p>
+              </div>
+
+              <!--
+                Assigned To — manager always sees this
+                Employee only sees it to know who else might be on the task
+              -->
+              <div class="col-6 col-md-3">
+                <p class="wt-detail-section-label">Assigned To</p>
+                <p id="detail-assigned-to" class="text-white small mb-0 fw-medium"></p>
+              </div>
+
+              <div class="col-6 col-md-3">
+                <p class="wt-detail-section-label">Created</p>
+                <p id="detail-created" class="text-white small mb-0 fw-medium"></p>
+              </div>
+
+            </div>
+
+            <!-- Project link — only shows if link exists -->
+            <div id="detail-link-section" class="wt-detail-section mb-4 d-none">
+              <p class="wt-detail-section-label">Project Link</p>
+              <a id="detail-project-link-display"
+                 href="#"
+                 target="_blank"
+                 rel="noopener"
+                 class="wt-task-link">
+              </a>
+            </div>
+
+            <!-- Divider -->
+            <hr class="wt-divider"/>
+
+            <!--
+              EMPLOYEE ACTIONS
+              d-none by default — tasks.js shows for employees
+              Employee can update their own task status
+            -->
+            <div id="detail-employee-actions" class="d-none">
+              <p class="wt-detail-section-label mb-2">Update Status</p>
+              <div class="d-flex flex-wrap gap-2">
+                <button class="btn wt-status-btn" data-status="pending">Pending</button>
+                <button class="btn wt-status-btn" data-status="doing">Doing</button>
+                <button class="btn wt-status-btn" data-status="reviewing">Mark as Done</button>
+              </div>
+              <p class="wt-hint mt-2">You can also drag cards on the board to update status</p>
+            </div>
+
+            <!--
+              MANAGER ACTIONS
+              d-none by default — tasks.js shows for managers
+            -->
+            <div id="detail-manager-actions" class="d-none">
+              <div class="row g-3">
+
+                <div class="col-12 col-md-6">
+                  <p class="wt-detail-section-label mb-2">Change Due Date</p>
+                  <input type="date" id="detail-edit-due" class="form-control wt-input"/>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <p class="wt-detail-section-label mb-2">Change Priority</p>
+                  <select id="detail-edit-priority" class="form-control wt-input">
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                  </select>
+                </div>
+
+              </div>
+
+              <button id="detail-save-btn" class="btn wt-btn-primary mt-3 px-4">
+                Save Changes
+              </button>
+
+              <p id="detail-save-msg" class="wt-hint mt-2 d-none" style="color:#4ade80;">
+                ✓ Changes saved
+              </p>
+
+              <div class="d-flex gap-2 mt-3">
+                <button class="btn wt-btn-primary wt-mgr-status-btn" data-status="done">✓ Approve Done</button>
+                <button class="btn btn-danger wt-mgr-status-btn" data-status="failed">✗ Mark Failed</button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ===== END TASK DETAIL MODAL ===== -->
+
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src='{% static "js/tasks.js" %}'></script>
+{% endblock content %}
